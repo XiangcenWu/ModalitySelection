@@ -35,4 +35,5 @@ seg_model.eval()
 
 
 dice_t2, dice_dwi, dice_both = test_seg_net(seg_model, inference_loader, device='cuda:0')
-print(f't2:{dice_t2}, dwi:{dice_dwi}, both:{dice_both}')
+print(f't2:{dice_t2.mean().item(), dice_t2.std().item()}, dwi:{dice_dwi.mean().item(), dice_dwi.std().item()}\
+, both:{dice_both.mean().item(), dice_both.std().item()}')

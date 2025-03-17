@@ -82,10 +82,10 @@ def test_seg_net(
     seg_model.eval()  # Set to evaluation mode
     
     
-    step_e = 0.
-    dice_t2 = 0.
-    dice_dwi = 0.
-    dice_both = 0.
+
+    dice_t2 = []
+    dice_dwi = []
+    dice_both = []
     
     for batch in inference_loader:
         label = batch['lesion'].to(device)
@@ -95,16 +95,16 @@ def test_seg_net(
         with torch.no_grad():
             
             output = seg_model(t2)
-            dice_t2 += dice_coefficient(output, label, post=True)
+            dice_t2.append(dice_coefficient(output, label, post=True).item())
 
             output = seg_model(dwi)
-            dice_dwi += dice_coefficient(output, label, post=True)
+            dice_dwi.append(dice_coefficient(output, label, post=True).item())
             
             output = seg_model(both)
-            dice_both += dice_coefficient(output, label, post=True)
+            dice_both.append(dice_coefficient(output, label, post=True).item())
 
-        step_e += 1
 
-    return dice_t2 / step_e, dice_dwi / step_e, dice_both / step_e
+
+    return torch.tensor(dice_t2) , torch.tensor(dice_dwi), torch.tensor(dice_both)
 
 

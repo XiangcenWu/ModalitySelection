@@ -1,16 +1,13 @@
 from RL.Env import Env
 from RL.Agent import Agent
-from Training import data_spilt, ReadH5d, create_data_loader
-from Training import train_seg_net, test_seg_net
+from Training import data_spilt
 from monai.transforms import *
-from monai.networks.nets import DynUNet, SwinUNETR
-from monai.losses import DiceFocalLoss
+from monai.networks.nets import SwinUNETR
 import torch
-import random
 
 
 
-seg_list, rl_list, holdout_list = data_spilt('/raid/candi/xiangcen/miami-data/miama_h5', 825, 400, 100)
+seg_list, rl_list, holdout_list = data_spilt('/raid/candi/xiangcen/miami-data/miama_h5', 925, 300, 100)
 
 
 device = 'cuda:0'
@@ -40,8 +37,13 @@ agent.load_models("/raid/candi/xiangcen/trained_models/RLModels/actor29.ptm")
 
 
 
-_result = 0.
-_step = 0.
+
+
+
+
+_result = []
+_index = []
+
 for patient_dir in holdout_list:
     test_result_list = []
     agent.memory.clear_memory()
@@ -55,9 +57,41 @@ for patient_dir in holdout_list:
         obs = next_obs
         
     max_num = max(test_result_list)  # Finds the maximum value
-    _result += max_num
-    _step += 1
-    print(test_result_list)
+    max_index = test_result_list.index(max_num) 
+    _result.append(max_num)
+    _index.append(max_index)
+    # print(test_result_list)
+    
+
+    
+print(torch.tensor(_result).mean(), torch.tensor(_result).std(), torch.tensor(_index).float().mean())
     
     
-print(_result / _step)
+    
+    
+    
+print("navie agent")
+
+_result = []
+
+for patient_dir in holdout_list:
+    test_result_list = []
+    agent.memory.clear_memory()
+    env = Env(patient_dir, seg_model)
+    obs = env.reset()
+    
+    for _ in range(8):
+        x = torch.randint(0, 4, size=(1, )).item()
+        action = x * 8 + _
+        next_obs, reward = env.step(action)
+        test_result_list.append(env.calculate_current_accuracy())
+        obs = next_obs
+        
+    max_num = max(test_result_list)  # Finds the maximum value
+    _result.append(max_num)
+
+    
+
+    
+print(torch.tensor(_result).mean(), torch.tensor(_result).std())
+

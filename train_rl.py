@@ -11,9 +11,9 @@ import random
 
 
 
+# seg_list, rl_list, holdout_list = data_spilt('/raid/candi/xiangcen/miami-data/miama_h5', 825, 400, 100)
 
-
-seg_list, rl_list, holdout_list = data_spilt('/raid/candi/xiangcen/miami-data/miama_h5', 825, 400, 100)
+seg_list, rl_list, holdout_list = data_spilt('/raid/candi/xiangcen/miami-data/miama_h5', 925, 300, 100)
 
 
 
@@ -75,7 +75,7 @@ for epoch in range(101): # loop over dataset (patients)
 
     if (epoch + 1) % 10 == 0:
         agent.save_models(
-            f'/raid/candi/xiangcen/trained_models/RLModels/actor{epoch}.ptm'
+            f'/raid/candi/xiangcen/trained_models/RLModels/actor_reinforce_{epoch}.ptm'
         )
         print(f'This is epoch {epoch}, average reward w/noise: {_reward/_step}')
 
