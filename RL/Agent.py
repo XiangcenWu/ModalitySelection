@@ -161,8 +161,10 @@ class Agent:
 
 
         self.memory.clear_memory()
-        
-        
+    def learn_grpo(self, optimizer):
+        pass
+    def learn_qlearning(self, optimizer):
+        pass
         
     def save_models(self, actor_file_name):
         torch.save(self.actor.state_dict(), actor_file_name)

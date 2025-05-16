@@ -72,11 +72,12 @@ def get_all_files(file_name, base_dir):
 
 
 
-def save_h5(root_dir: str, file_nick_name: str, t2_tensor: torch.tensor, dwi_tensor: torch.tensor, lesion_tensor: torch.tensor):
+def save_h5(root_dir: str, file_nick_name: str, t2_tensor: torch.tensor, dwi_tensor: torch.tensor, adc_tensor: torch.tensor, lesion_tensor: torch.tensor):
     file_name = os.path.join(root_dir, file_nick_name + '.h5')
     with h5py.File(file_name, 'w') as h5_file:
         h5_file.create_dataset('t2', data=t2_tensor)
         h5_file.create_dataset('dwi', data=dwi_tensor)
+        h5_file.create_dataset('adc', data=adc_tensor)
         h5_file.create_dataset('lesion', data=lesion_tensor)
 
 
@@ -147,5 +148,6 @@ for item in data_list:
     # ])
     # lesion_tensor = lesion_tensor
 
-    save_h5('/raid/candi/xiangcen/miami-data/miama_h5', item_name, t2_tensor, dwi_tensor, lesion_tensor)
-    
+    save_h5('/raid/candi/xiangcen/miami-data/miama_h5', item_name, t2_tensor, dwi_tensor, adc_tensor, lesion_tensor)
+    print(f'{item_name} done')
+

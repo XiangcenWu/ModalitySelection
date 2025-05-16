@@ -33,8 +33,8 @@ step_to_train = 40
 batch_size = 10
 n_epochs = 2
 agent = Agent(gamma = 0.5, batch_size=batch_size, n_epochs=n_epochs, step_to_train=step_to_train, device=device)
-agent.load_models("/raid/candi/xiangcen/trained_models/RLModels/actor29.ptm")
-
+# agent.load_models("/raid/candi/xiangcen/trained_models/RLModels/actor29.ptm") # 29
+agent.load_models("/raid/candi/xiangcen/trained_models/RLModels/actor_reinforce_59.ptm") # 29
 
 
 
@@ -65,8 +65,7 @@ for patient_dir in holdout_list:
 
     
 print(torch.tensor(_result).mean(), torch.tensor(_result).std(), torch.tensor(_index).float().mean())
-    
-    
+
     
     
     
