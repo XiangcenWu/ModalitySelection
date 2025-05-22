@@ -6,7 +6,7 @@ from monai.losses import DiceFocalLoss, DiceLoss
 import torch
 batch_size=6
 num_epoch=1000
-device = 'cuda:0'
+device = 'cuda:1'
 
 
 seg_list, rl_list, holdout_list = data_spilt('/raid/candi/xiangcen/miami-data/miama_h5', 925, 300, 100)
@@ -29,11 +29,12 @@ seg_model = SwinUNETR(
     downsample="mergingv2",
     use_v2=True,
 )
-seg_model.load_state_dict(torch.load("/raid/candi/xiangcen/trained_models/SegModels/swinunetr.ptm", map_location=device, weights_only=True))
+seg_model.load_state_dict(torch.load("/raid/candi/xiangcen/trained_models/SegModels/swinunetr.ptm", map_location=device))
 seg_model.eval()
 
 
 
-dice_t2, dice_dwi, dice_both = test_seg_net(seg_model, inference_loader, device='cuda:0')
+
+dice_t2, dice_dwi, dice_both = test_seg_net(seg_model, inference_loader, device=device)
 print(f't2:{dice_t2.mean().item(), dice_t2.std().item()}, dwi:{dice_dwi.mean().item(), dice_dwi.std().item()}\
 , both:{dice_both.mean().item(), dice_both.std().item()}')
