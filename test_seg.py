@@ -6,10 +6,10 @@ from monai.losses import DiceFocalLoss, DiceLoss
 import torch
 batch_size=6
 num_epoch=1000
-device = 'cuda:1'
+device = 'cuda:0'
 
 
-seg_list, rl_list, holdout_list = data_spilt('/raid/candi/xiangcen/miami-data/miama_h5', 925, 300, 100)
+seg_list, rl_list, holdout_list = data_spilt('/raid/candi/xiangcen/miami-data/miama_h5_reinforce', 925, 300, 100)
 
 
 inference_transform = ReadH5d()
@@ -35,6 +35,8 @@ seg_model.eval()
 
 
 
-dice_t2, dice_dwi, dice_both = test_seg_net(seg_model, inference_loader, device=device)
+dice_t2, dice_dwi, dice_both, hd_t2, hd_dwi, hd_both = test_seg_net(seg_model, inference_loader, device=device)
 print(f't2:{dice_t2.mean().item(), dice_t2.std().item()}, dwi:{dice_dwi.mean().item(), dice_dwi.std().item()}\
 , both:{dice_both.mean().item(), dice_both.std().item()}')
+print(f't2:{hd_t2.mean().item(), hd_t2.std().item()}, dwi:{hd_dwi.mean().item(), hd_dwi.std().item()}\
+, both:{hd_both.mean().item(), hd_both.std().item()}')

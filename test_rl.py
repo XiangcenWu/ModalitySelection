@@ -7,7 +7,7 @@ import torch
 
 
 
-seg_list, rl_list, holdout_list = data_spilt('/raid/candi/xiangcen/miami-data/miama_h5', 925, 300, 100)
+seg_list, rl_list, holdout_list = data_spilt('/raid/candi/xiangcen/miami-data/miama_h5_reinforce', 925, 300, 100)
 
 
 device = 'cuda:0'
@@ -33,8 +33,8 @@ step_to_train = 40
 batch_size = 10
 n_epochs = 2
 agent = Agent(gamma = 0.5, batch_size=batch_size, n_epochs=n_epochs, step_to_train=step_to_train, device=device)
-# agent.load_models("/raid/candi/xiangcen/trained_models/RLModels/actor29.ptm") # 29
-agent.load_models("/raid/candi/xiangcen/trained_models/RLModels/actor_reinforce_59.ptm") # 29
+agent.load_models("/raid/candi/xiangcen/trained_models/RLModels/actor29.ptm") # 29
+# agent.load_models("/raid/candi/xiangcen/trained_models/RLModels/actor_reinforce_59.ptm") # 29
 
 
 

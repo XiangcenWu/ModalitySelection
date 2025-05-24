@@ -41,6 +41,20 @@ class PPOMemory:
         self.states = []
         self.actions = []
         self.rewards = []
+        
+    def generate_batches_grpo(self):
+        pass
+        # batch_start = torch.arange(0, self.step_to_train, self.batch_size)
+        # indices = torch.randperm(self.step_to_train, dtype=int)
+        # batches = [indices[i:i+self.batch_size] for i in batch_start]
+        
+        # actions = [torch.tensor(item) for item in self.actions]
+
+
+        # return torch.stack(self.states),\
+        #         torch.stack(actions),\
+        #         torch.tensor(self.rewards),\
+        #         batches
 
 
     

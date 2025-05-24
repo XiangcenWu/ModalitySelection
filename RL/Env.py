@@ -15,16 +15,17 @@ class Env():
 
         self.t2 = patient['t2']
         self.dwi = patient['dwi']
-        self.gt = patient['lesion']
+        self.gt = (patient['lesion'] != 0).float()
         self.shape = self.t2.shape
         
-        self.both_seg = self.get_inference_output(seg_model, torch.cat([self.t2, self.dwi]))
-        self.t2_seg = self.get_inference_output(seg_model, torch.cat([self.t2, torch.zeros_like(self.dwi)]))
-        self.dwi_seg = self.get_inference_output(seg_model, torch.cat([torch.zeros_like(self.dwi), self.dwi]))
+        # segmentation that has been post processed
+        self.both_seg = self.get_inference_output(seg_model, torch.cat([self.t2, self.dwi]), post=True)
+        self.t2_seg = self.get_inference_output(seg_model, torch.cat([self.t2, torch.zeros_like(self.dwi)]), post=True)
+        self.dwi_seg = self.get_inference_output(seg_model, torch.cat([torch.zeros_like(self.dwi), self.dwi]), post=True)
         
 
         self.current_segmentation = torch.zeros(size=self.shape)
-        self.last_action = torch.zeros(self.shape)
+        # self.last_action = torch.zeros(self.shape)
         
         
         self.both_dice, self.t2_dice, self.dwi_dice = self.get_all_accuracy()
@@ -49,10 +50,11 @@ class Env():
     def all_zero(self):
         return all(num == 0 for num in (self.mean_dice, self.worst_dice, self.best_dice))
 
-    def get_inference_output(self, seg_model, input_tensor):
+    def get_inference_output(self, seg_model, input_tensor, post=True):
         with torch.no_grad():
             output = seg_model(input_tensor.unsqueeze(0))
-            output = post_process(output).squeeze(0)
+            if post:
+                output = post_process(output).squeeze(0)
         return output
 
 
@@ -110,8 +112,6 @@ class Env():
     
     
     def get_all_accuracy(self):
-
-        
         both = dice_coefficient(self.both_seg, self.gt, post=False).item()
         t2 = dice_coefficient(self.t2_seg, self.gt, post=False).item()
         dwi = dice_coefficient(self.dwi_seg, self.gt, post=False).item()
@@ -132,8 +132,4 @@ class Env():
         
     def clear_current_segmentation(self):
         self.current_segmentation = torch.zeros(size=self.shape)
-        
-        
-        
-        
 

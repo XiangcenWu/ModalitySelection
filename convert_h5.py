@@ -92,6 +92,7 @@ data_list = get_all_files(file_name, base_dir)
 print(len(data_list))
 
 
+# scaler = ScaleIntensityRangePercentiles(10, 90, 0, 1, clip= True)
 scaler = ScaleIntensityRangePercentiles(0, 100, 0, 1)
 resizer = Resize((128, 128, 32), mode="trilinear")
 resizer_lesion = Resize((128, 128, 32), mode="nearest-exact")
@@ -143,8 +144,9 @@ for item in data_list:
     t2_tensor = scaler(t2_tensor)
     dwi_tensor = scaler(dwi_tensor)
     adc_tensor = scaler(adc_tensor)
-    lesion_tensor = (lesion_tensor != 0).float()
-    gland_tensor = scaler(gland_tensor)
+    
+    # lesion_tensor = (lesion_tensor != 0).float()
+    # gland_tensor = scaler(gland_tensor)
     
 
 
@@ -155,6 +157,6 @@ for item in data_list:
     # ])
     # lesion_tensor = lesion_tensor
 
-    save_h5('/raid/candi/xiangcen/miami-data/miama_h5', item_name, t2_tensor, dwi_tensor, adc_tensor, lesion_tensor, gland_tensor)
+    save_h5('/raid/candi/xiangcen/miami-data/miama_h5_reinforce', item_name, t2_tensor, dwi_tensor, adc_tensor, lesion_tensor, gland_tensor)
     print(f'{item_name} done')
 
